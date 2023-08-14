@@ -1,0 +1,34 @@
+* UserProfile Service
+
+** Documentation
+To access documentation
+#+begin_src bash
+docker compose up
+#+end_src
+
+Wait for the containers to startup
+Cassandra takes a while to start up(more than a minute)
+
+You should be able to access the docs on localhost:6000/docs
+
+** Hostname database
+Nodejs api connects to the host named "cassandra"(NOT localhost)
+Therefore if you wish to run a database container using docker run, you have to keep in mind two things:
+1. API container and db container must share a network
+2. Cassandra container must have a hostname "cassandra"
+
+Follow these instructions:
+#+begin_src bash
+# Rename the network name "user_service_network" to whatever you like
+docker network create -d bridge session_service_network
+# Create a database container
+# Don't forget to wait for a database to initialize
+docker run -d --hostname cassandra --name dev-cass --network session_service_network cassandra
+# cd to the project folder
+cd /path/to/the/projectfolder
+# build the image
+docker build . -t session_service_image
+# Create API container
+docker run -d --name nodejs-api --network session_service_network -p 6000:6000 session_service_image
+# If the container crashes it means that the database hasn't initialized yet. Be patient!
+#+end_src
