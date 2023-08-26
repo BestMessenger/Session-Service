@@ -5,7 +5,7 @@ const router = express.Router()
 const Uuid = cassandra.types.Uuid
 
 const client = new cassandra.Client({
-    contactPoints: ["cassandra"],
+    contactPoints: ["localhost"],
     localDataCenter: "datacenter1",
 });
 

@@ -2,6 +2,7 @@ const express = require('express')
 const cors = require('cors')
 const sessionRouter = require('./routes/session')
 const swaggerDocs = require('./swagger')
+const eurekaHelper = require('./eureka-helper');
 const app = express()
 
 
@@ -16,3 +17,4 @@ app.listen(port, () => {
     console.log(`Listening on port: ${port}`)
     swaggerDocs(app, port)
 })
+eurekaHelper.registerWithEureka('session-service', port);
